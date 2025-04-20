@@ -99,4 +99,11 @@ if uploaded_file is not None:
     label = "Real" if prediction == 0 else "Deepfake"
     st.markdown(f"### 🔍 Prediction: **{label}**")
     st.markdown(f"📊 **Confidence:** {confidence:.2%}")
+st.markdown("""---""")
+st.markdown("""
+### ⚠️ Disclaimer  
+**This deepfake detection model is a work in progress and is provided for research and educational purposes only.**  
+It does **not guarantee 100% accuracy** and should **not be used as a sole decision-making tool** in high-stakes or critical scenarios.  
+Users are advised to interpret results with caution and not rely solely on the predictions for conclusive judgments.
+""")
 
