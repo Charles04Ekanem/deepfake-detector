@@ -7,8 +7,8 @@ from model_loader import load_model
 st.set_page_config(page_title="Deepfake Detector", layout="centered")
 st.markdown("<style>footer {visibility: hidden;}</style>", unsafe_allow_html=True)
 
-st.title("🔍 Deepfake Detection App")
-st.write("Upload a face image to check if it's **Real** or **Deepfake**.")
+st.title("🔍DEEPFAKE DETECTION SYSTEM, ANIE-AKAN")
+st.write("Upload a face image to check if it's **REAL** or **DEEPFAKE**.")
 
 uploaded_file = st.file_uploader("📁 Upload an image", type=["jpg", "jpeg", "png"])
 
@@ -33,5 +33,5 @@ if uploaded_file is not None:
         confidence = torch.softmax(output, dim=1).squeeze()[prediction].item()
 
     label = "Real" if prediction == 0 else "Deepfake"
-    st.markdown(f"### 🧠 Prediction: **{label}**")
-    st.markdown(f"### 🔒 Confidence: **{confidence:.2%}**")
+    st.markdown(f"### 🧠 prediction: **{label}**")
+    st.markdown(f"### 🔒 confidence: **{confidence:.2%}**")
