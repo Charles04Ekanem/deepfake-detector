@@ -4,18 +4,16 @@ import os
 import gdown
 
 device = torch.device("cpu")
-MODEL_PATH = "best_model.pth"
-DRIVE_FILE_ID = "1-Uc3_jm0-_LkV0otAn9osBD3ra44hC0T"  # <-- Your model file ID
 
-def download_model():
-    if not os.path.exists(MODEL_PATH):
+def download_model(model_path: str, file_id: str):
+    if not os.path.exists(model_path):
         print("[INFO] Downloading model from Google Drive...")
-        url = f"https://drive.google.com/uc?id={DRIVE_FILE_ID}"
-        gdown.download(url, MODEL_PATH, quiet=False)
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, model_path, quiet=False)
 
-def load_model():
-    download_model()
+def load_model(model_path="best_model.pth", file_id="1-Uc3_jm0-_LkV0otAn9osBD3ra44hC0T"):
+    download_model(model_path, file_id)
     model = InceptionResnetV1(classify=True, num_classes=2).to(device)
-    model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
+    model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
     return model
