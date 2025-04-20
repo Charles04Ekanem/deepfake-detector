@@ -1,56 +1,35 @@
 import streamlit as st
 import torch
-from facenet_pytorch import InceptionResnetV1
 from PIL import Image
-import numpy as np
-import gdown
-import os
 import torchvision.transforms as transforms
+from model_loader import load_model
 
-# SETUP MODEL PATH & DOWNLOAD FROM GOOGLE DRIVE 
-MODEL_PATH = "best_model.pth"
-DRIVE_FILE_ID = "1-Uc3_jm0-_LkV0otAn9osBD3ra44hC0T"  
+st.set_page_config(page_title="Deepfake Detector", layout="centered")
+st.markdown("<style>footer {visibility: hidden;}</style>", unsafe_allow_html=True)
 
-@st.cache_resource
-def download_model():
-    if not os.path.exists(MODEL_PATH):
-        with st.spinner("Downloading model..."):
-            url = f"https://drive.google.com/uc?id=1-Uc3_jm0-_LkV0otAn9osBD3ra44hC0T"
-            gdown.download(url, MODEL_PATH, quiet=False)
-    return MODEL_PATH
+# === Title & description ===
+st.title("🔍 Deepfake Detection App")
+st.write("Upload a face image to check if it's **Real** or **Deepfake** using a deep learning model.")
 
-# LOAD MODEL 
-@st.cache_resource
-def load_model(model_path):
-    model = InceptionResnetV1(classify=True, num_classes=2)
-    model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-    model.eval()
-    return model
+# === File uploader ===
+uploaded_file = st.file_uploader("📁 Upload an image", type=["jpg", "jpeg", "png"])
 
-# DEFINE PREPROCESSING 
+# === Image preprocessing ===
 transform = transforms.Compose([
     transforms.Resize((160, 160)),
     transforms.ToTensor(),
     transforms.Normalize([0.5], [0.5])
 ])
 
-# === UI ===
-st.title("DEEPFAKE DETECTION SYSTEM, ANIE-AKAN")
-st.write("Upload a face image to check if it's REAL or DEEPFAKE")
-
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-
 if uploaded_file is not None:
-    # Show uploaded image
     image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="🖼 Uploaded Image", use_column_width=True)
 
-    # Preprocess
-    input_tensor = transform(image).unsqueeze(0)  # Add batch dimension
+    # Preprocess image
+    input_tensor = transform(image).unsqueeze(0)
 
     # Load model
-    model_path = download_model()
-    model = load_model(model_path)
+    model = load_model()
 
     # Inference
     with torch.no_grad():
@@ -58,7 +37,6 @@ if uploaded_file is not None:
         prediction = torch.argmax(output, dim=1).item()
         confidence = torch.softmax(output, dim=1).squeeze()[prediction].item()
 
-    # Display result
     label = "Real" if prediction == 0 else "Deepfake"
-    st.markdown(f"### Prediction: **{label}**")
-    st.markdown(f"**Confidence:** {confidence:.2%}")
+    st.markdown(f"### 🧠 Prediction: **{label}**")
+    st.markdown(f"### 🔒 Confidence: **{confidence:.2%}**")
