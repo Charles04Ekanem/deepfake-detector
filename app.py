@@ -52,7 +52,7 @@ st.sidebar.info("🧠 Powered by PyTorch + Streamlit", icon="ℹ️")
 
 # === MODEL CONFIG ===
 MODEL_PATH = "best_model.pth"
-DRIVE_FILE_ID = "1-Uc3_jm0-_LkV0otAn9osBD3ra44hC0T"
+DRIVE_FILE_ID = "1PYwGlq43s4tt9bpQiQmWSFPBCVONFnzO" 
 
 @st.cache_resource
 def download_model():
