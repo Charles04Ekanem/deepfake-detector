@@ -7,7 +7,7 @@ from model_loader import load_model
 st.set_page_config(page_title="Deepfake Detector", layout="centered")
 st.markdown("<style>footer {visibility: hidden;}</style>", unsafe_allow_html=True)
 
-st.title("🔍DEEPFAKE DETECTION SYSTEM, ANIE-AKAN")
+st.title("🔍 DEEPFAKE DETECTION SYSTEM")
 st.write("Upload a face image to check if it's **REAL** or **DEEPFAKE**.")
 
 uploaded_file = st.file_uploader("📁 Upload an image", type=["jpg", "jpeg", "png"])
