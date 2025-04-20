@@ -8,7 +8,7 @@ import os
 import torchvision.transforms as transforms
 
 # === PAGE CONFIG & STYLING ===
-st.set_page_config(page_title="Deepfake Detector", page_icon="🕵️", layout="centered")
+st.set_page_config(page_title="DEEPFAKE DETECTION SYSTEM", page_icon="🕵️", layout="centered")
 
 st.markdown("""
 <style>
@@ -33,21 +33,22 @@ st.markdown("""
 
 # === SIDEBAR ===
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/3064/3064197.png", width=100)
-st.sidebar.title("🔧 App Info")
+st.sidebar.title("INFO")
 st.sidebar.markdown("""
-This app detects whether a face image is **Real** or a **Deepfake** using a deep learning model.
+This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 
-**How to Use**:
-1. Upload a face image (JPEG/PNG).
+**HOW TO USE**:
+1. Upload a face image (JPG/JPEG/PNG).
 2. Get a prediction with confidence.
 
-**Model**:
-- InceptionResnetV1
-- Trained on deepfake dataset
+**MODEL AND DATASET**:
+- INCEPTIONRESNETV1
+- Trained on FACEFORENSICS++ Dataset
 
-[📂 GitHub Repo](https://github.com/Charles04Ekanem/deepfake-detector)
+[📂 Link to Github repo](https://github.com/Charles04Ekanem/deepfake-detector)
 """)
 st.sidebar.info("🧠 Powered by PyTorch + Streamlit", icon="ℹ️")
+st.sidebar.info("NOTE: THIS MODEL CANNOT GUARANTEE 100% ACCURACY AND MUST BE TREATED AS SUCH")
 
 # === MODEL CONFIG ===
 MODEL_PATH = "best_model.pth"
@@ -76,8 +77,8 @@ transform = transforms.Compose([
 ])
 
 # === MAIN UI ===
-st.title("🕵️ Deepfake Detection App")
-st.markdown("Upload a **face image** to check if it's **Real or Deepfake**.")
+st.title("🕵️ DEEPFAKE DETECTION SYSTEM")
+st.markdown("Upload a **FACE IMAGE** to check if it's **REAL or DEEPFAKE**.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
