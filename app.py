@@ -39,7 +39,8 @@ HELLO, This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 
 **HOW TO USE**:
 1. Upload a face image (JPG/JPEG/PNG).
-2. Get a prediction with confidence.
+2. Get a prediction.
+3. Please take note of the disclaimer below
 
 **MODEL AND DATASET**:
 - INCEPTIONRESNETV1
@@ -104,4 +105,5 @@ st.markdown("""
 It does **NOT GUARANTEE 100% ACCURACY** and should **NOT be used as a sole decision-making tool** in sensitive or critical scenarios.  
 Please use the results carefully and combine these predictions with your own judgment or expert advice.
 """)
+st.markdown("© 2025 Charles Ekanem. All rights reserved.")
 
