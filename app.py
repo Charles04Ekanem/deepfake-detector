@@ -35,7 +35,7 @@ st.markdown("""
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/3064/3064197.png", width=100)
 st.sidebar.title("INFO")
 st.sidebar.markdown("""
-This system detects whether a face image is **REAL** or a **DEEPFAKE**.
+HELLO!! This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 
 **HOW TO USE**:
 1. Upload a face image (JPG/JPEG/PNG).
@@ -48,7 +48,6 @@ This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 [📂 Link to Github repo](https://github.com/Charles04Ekanem/deepfake-detector)
 """)
 st.sidebar.info("🧠 Powered by PyTorch + Streamlit", icon="ℹ️")
-st.sidebar.info("NOTE: THIS MODEL CANNOT GUARANTEE 100% ACCURACY AND MUST BE TREATED AS SUCH")
 
 # === MODEL CONFIG ===
 MODEL_PATH = "best_model.pth"
@@ -102,8 +101,8 @@ if uploaded_file is not None:
 st.markdown("""---""")
 st.markdown("""
 ### ⚠️ Disclaimer  
-**This deepfake detection model is a work in progress and is provided for research and educational purposes only.**  
-It does **not guarantee 100% accuracy** and should **not be used as a sole decision-making tool** in high-stakes or critical scenarios.  
-Users are advised to interpret results with caution and not rely solely on the predictions for conclusive judgments.
+**This Deepfake Detection System is still under development and is meant for research and educational use.**  
+It does **NOT GUARANTEE 100% ACCURACY** and should **NOT be used as a sole decision-making tool** in sensitive or critical scenarios.  
+Please use the results carefully and combine these predictions with your own judgment or expert advice.
 """)
 
