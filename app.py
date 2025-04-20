@@ -35,7 +35,7 @@ st.markdown("""
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/3064/3064197.png", width=100)
 st.sidebar.title("INFO")
 st.sidebar.markdown("""
-HELLO!! This system detects whether a face image is **REAL** or a **DEEPFAKE**.
+HELLO, This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 
 **HOW TO USE**:
 1. Upload a face image (JPG/JPEG/PNG).
@@ -97,7 +97,6 @@ if uploaded_file is not None:
 
     label = "Real" if prediction == 0 else "Deepfake"
     st.markdown(f"### 🔍 Prediction: **{label}**")
-    st.markdown(f"📊 **Confidence:** {confidence:.2%}")
 st.markdown("""---""")
 st.markdown("""
 ### ⚠️ Disclaimer  
