@@ -2,8 +2,8 @@ import streamlit as st
 from PIL import Image
 from model_loader import load_model, predict_image
 
-st.title("🕵️ Deepfake Detection")
-st.write("Upload a face image and find out if it's **real or fake**!")
+st.title("🕵️ DEEPFAKE DETECTION SYSTEM")
+st.write("UPLOAD A FACE IMAGE TO FIND OUT IF IT'S **REAL** OR **FAKE**!")
 
 model_path = "best_model.pth"
 model = load_model(model_path)
