@@ -44,7 +44,7 @@ HELLO, This system detects whether a face image is **REAL** or a **DEEPFAKE**.
 
 **MODEL AND DATASET**:
 - INCEPTIONRESNETV1
-- Trained on FACEFORENSICS++ Dataset
+- Trained on FACEFORENSICS++, CELEB-DF, OPENFORENSICS Datasets
 
 [📂 Link to Github repo](https://github.com/Charles04Ekanem/deepfake-detector)
 """)
