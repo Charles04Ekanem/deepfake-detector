@@ -102,7 +102,7 @@ st.markdown("""---""")
 st.markdown("""
 ### ⚠️ Disclaimer  
 **This Deepfake Detection System is still under development and is meant for research and educational use.**  
-It does **NOT GUARANTEE 100% ACCURACY** and should **NOT be used as a sole decision-making tool** in sensitive or critical scenarios.  
+It does **NOT GUARANTEE 100% ACCURACY** and should **NOT** be used as a sole decision-making tool in sensitive or critical scenarios.  
 Please use the results carefully and combine these predictions with your own judgment or expert advice.
 """)
 st.markdown("© 2025 Charles Ekanem. All rights reserved.")
