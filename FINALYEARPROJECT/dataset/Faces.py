@@ -23,7 +23,7 @@ class Faces(Dataset):
         self.root_dir = root_dir
         if transform is True:
             self.transform = transforms.Compose([
-                transforms.Resize((256, 256)),
+                transforms.Resize((160, 160)),
                 transforms.ToTensor()
             ])
         elif transform is False or transform is None:
