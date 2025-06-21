@@ -11,5 +11,5 @@ validation loss of 0.0671, indicating strong generalization and low overfitting.
 setups alongside proper data preparation for high-accuracy deepfake detection. Future work will explore video-level analysis, ensemble learning and real-time
 deployment strategies to expand the model’s applicability.
 
-**Recommended Directory Structure**
 ![image](https://github.com/user-attachments/assets/761be6fb-25e1-4e0e-95b5-f0801986a684)
+                                **Recommended Directory Structure**
