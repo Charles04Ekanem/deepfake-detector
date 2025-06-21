@@ -9,7 +9,13 @@ import torch
 from torchvision import transforms
 from torch.utils.data import Dataset
 from PIL import Image
-from Constants import ORIGINAL_VIDEOS_FOLDER, FAKE_VIDEOS_FOLDER, FACES_FOLDER, FACES_CSV
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATASET_DIR = os.path.join(BASE_DIR, "dataset")
+ORIGINAL_VIDEOS_FOLDER = os.path.join(DATASET_DIR, "original_sequences", "youtube", "raw", "videos")
+FAKE_VIDEOS_FOLDER = os.path.join(DATASET_DIR, "manipulated_sequences", "DeepFakeDetection", "raw", "videos")
+FACES_FOLDER = os.path.join(DATASET_DIR, "faces")
+FACES_CSV = os.path.join(FACES_FOLDER, "balanced_faces_temp.csv")
 
 class Faces(Dataset):
     def __init__(self, csv_file, root_dir, split="training", transform=None):
@@ -23,23 +29,17 @@ class Faces(Dataset):
         elif transform is False or transform is None:
             self.transform = None
         else:
-            transform = transform
-        split="training"
-        
+            self.transform = transform
+        self.split = split
+
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        idx = int(idx)
         img_path = self.data.iloc[idx]['name']
         label = int(self.data.iloc[idx]['label'])
 
-        # Determine if the image is real or fake
-        if label == 1:
-            folder = os.path.join("dataset", "faces", "real")
-        else:
-            folder = os.path.join("dataset", "faces", "fake")
-
+        folder = os.path.join(self.root_dir, "real" if label == 1 else "fake")
         full_path = os.path.join(folder, img_path)
         image = Image.open(full_path).convert("RGB")
 
@@ -98,19 +98,17 @@ class FaceExtractor:
         print(f"[INFO] Total real videos: {total_real_videos}")
         print(f"[INFO] Total fake videos: {total_fake_videos}")
 
-        # Calculate proportional fake faces
         total_real_faces = total_real_videos * self.faces_per_video
         fake_faces_per_video = max(1, (total_real_faces // total_fake_videos))
 
         print(f"[INFO] Extracting {self.faces_per_video} faces per real video.")
         print(f"[INFO] Extracting {fake_faces_per_video} faces per fake video (to balance).")
 
-        # === Extract faces ===
         for video in real_videos:
             print(f"[REAL] Processing {video}")
             self.extract_faces_from_video(
                 os.path.join(ORIGINAL_VIDEOS_FOLDER, video),
-                label=1,  # 1 = real
+                label=1,
                 output_dir=self.real_dir,
                 max_faces=self.faces_per_video
             )
@@ -119,23 +117,20 @@ class FaceExtractor:
             print(f"[FAKE] Processing {video}")
             self.extract_faces_from_video(
                 os.path.join(FAKE_VIDEOS_FOLDER, video),
-                label=0,  # 0 = fake
+                label=0,
                 output_dir=self.fake_dir,
                 max_faces=fake_faces_per_video
             )
 
-        # === Add pre-existing images ===
         for folder, label in [(self.real_dir, 1), (self.fake_dir, 0)]:
             for file in os.listdir(folder):
                 if file.endswith(('.jpg', '.png')):
                     self.data.append({"name": file, "label": label})
 
-        # === Save to CSV ===
         df = pd.DataFrame(self.data).drop_duplicates(subset=["name"])
         df.to_csv(self.csv_path, index=False)
         print(f"[INFO] Metadata saved to {self.csv_path}")
 
-        # === Visualizations ===
         self.visualize_counts(df)
         self.visualize_examples(df)
 
@@ -146,7 +141,6 @@ class FaceExtractor:
         print(f"[INFO] Total Real Faces: {num_real}")
         print(f"[INFO] Total Fake Faces: {num_fake}")
 
-        # Bar chart
         plt.figure(figsize=(6, 4))
         plt.bar(['Real', 'Fake'], [num_real, num_fake], color=['green', 'red'])
         plt.title("Face Class Distribution")
@@ -155,7 +149,6 @@ class FaceExtractor:
         plt.savefig(os.path.join(FACES_FOLDER, "class_distribution_bar.png"))
         plt.show()
 
-        # Pie chart
         plt.figure(figsize=(6, 4))
         plt.pie([num_real, num_fake], labels=['Real', 'Fake'], autopct='%1.1f%%', colors=['green', 'red'])
         plt.title("Face Class Proportions")
@@ -177,7 +170,6 @@ class FaceExtractor:
                     plt.axis("off")
                     plt.show()
 
-# === RUN SCRIPT ===
 if __name__ == "__main__":
     extractor = FaceExtractor(
         real_dir=os.path.join(FACES_FOLDER, "real"),
