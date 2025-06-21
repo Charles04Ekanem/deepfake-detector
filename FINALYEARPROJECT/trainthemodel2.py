@@ -14,10 +14,13 @@ import json
 
 # Configuration
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-FACES_FOLDER = r"C:\Users\CHARLES EKANEM\Documents\FINALYEARPROJECT\dataset\faces"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FACES_FOLDER = os.path.join(BASE_DIR, "dataset", "faces")
 FACES_CSV = os.path.join(FACES_FOLDER, "balanced_faces_temp.csv")
-OUTPUT_DIR = r"C:\Users\CHARLES EKANEM\Documents\FINALYEARPROJECT\models"
+OUTPUT_DIR = os.path.join(BASE_DIR, "models")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
 CLASS_NAMES = {0: "fake", 1: "real"}
 SPLIT_RATIO = 0.7
 PROGRESS_FILE = os.path.join(OUTPUT_DIR, "training_progress.json")
@@ -29,7 +32,7 @@ CONFIG = dict(
     save_path=os.path.join(OUTPUT_DIR, "best_model.pth")
 )
 
-# Load Data
+# Data Loaders for Validation and Training
 def get_data_loaders():
     print("[INFO] Loading dataset...")
     dataset = Faces(root_dir=FACES_FOLDER, csv_file=FACES_CSV, transform=True)
@@ -46,19 +49,18 @@ def get_data_loaders():
     print(f"[INFO] Validation set size: {len(val_idx)}")
     return train_loader, val_loader
 
-# Save Progress
+# Managing Training/Validation Progress
 def save_progress(epoch):
     with open(PROGRESS_FILE, 'w') as f:
         json.dump({"last_completed_epoch": epoch}, f)
 
-# Load Progress
 def load_progress():
     if os.path.exists(PROGRESS_FILE):
         with open(PROGRESS_FILE, 'r') as f:
             return json.load(f).get("last_completed_epoch", -1)
     return -1
 
-# Training
+# Training process
 def train_model(model, train_loader, val_loader, criterion, optimizer, epochs):
     history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
     best_val_acc = 0
@@ -106,14 +108,14 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, epochs):
 
             print(f"[INFO] Epoch {epoch+1}: Train Loss={avg_train_loss:.4f}, Acc={avg_train_acc:.4f} | Val Loss={avg_val_loss:.4f}, Acc={avg_val_acc:.4f}")
 
-            # Save best model
+            # Saves best model
             if avg_val_acc > best_val_acc:
                 best_val_acc = avg_val_acc
                 best_model_state = model.state_dict()
                 torch.save(best_model_state, CONFIG["save_path"])
                 print(f"[INFO] New best model saved at epoch {epoch+1}")
 
-            # Save current epoch model
+            # Checkpointing
             checkpoint_path = os.path.join(OUTPUT_DIR, f"epoch_{epoch+1}_model.pth")
             torch.save(model.state_dict(), checkpoint_path)
             save_progress(epoch)
@@ -126,12 +128,12 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, epochs):
         print("[INFO] Progress saved. You can resume training later.")
         return history, all_preds, all_labels
 
-    # Final best model save
+    # Final save
     torch.save(best_model_state, CONFIG["save_path"])
     print(f"[INFO] Best model saved to {CONFIG['save_path']}")
     return history, all_preds, all_labels
 
-# Plotting
+# Visualization
 def plot_metrics(history, all_preds, all_labels):
     # Loss vs Epoch
     plt.plot(history["train_loss"], label="Train Loss")
@@ -163,7 +165,7 @@ def plot_metrics(history, all_preds, all_labels):
         f.write(report)
     print("[INFO] Classification report saved.")
 
-# Run
+# Execution
 if __name__ == "__main__":
     model = InceptionResnetV1(pretrained="vggface2", classify=True, num_classes=1).to(DEVICE)
     criterion = nn.BCEWithLogitsLoss()
