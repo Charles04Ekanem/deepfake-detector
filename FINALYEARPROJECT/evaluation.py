@@ -8,26 +8,24 @@ from torchvision import transforms
 from sklearn.metrics import classification_report, accuracy_score
 from facenet_pytorch import InceptionResnetV1
 
-# Config
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MODEL_PATH = "best_model.pth"
-WILD_DIR = "dataset/DeepfakeTIMIT"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "models", "best_model.pth")
+WILD_DIR = os.path.join(BASE_DIR, "dataset", "DeepfakeTIMIT")
 IMG_EXTS = (".jpg", ".jpeg", ".png")
 
-# Image preprocessing
 transform = transforms.Compose([
     transforms.Resize((160, 160)),
     transforms.ToTensor(),
-    transforms.Normalize([0.5]*3, [0.5]*3)
+    transforms.Normalize([0.5] * 3, [0.5] * 3)
 ])
 
-# Dataset class
 class WildDataset(Dataset):
     def __init__(self, image_folder, transform=None):
         self.image_paths = []
         self.labels = []
 
-        # Infer labels from folder names
         for label_name in os.listdir(image_folder):
             label_path = os.path.join(image_folder, label_name)
             if os.path.isdir(label_path):
@@ -49,7 +47,6 @@ class WildDataset(Dataset):
         label = self.labels[idx]
         return img, label
 
-# Load model
 def load_model(path):
     model = InceptionResnetV1(pretrained='vggface2', classify=True, num_classes=2)
     model.load_state_dict(torch.load(path, map_location=DEVICE))
