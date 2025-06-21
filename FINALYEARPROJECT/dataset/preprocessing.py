@@ -3,22 +3,20 @@ import pandas as pd
 from PIL import Image
 from tqdm import tqdm
 
-# === PATHS ===
-RAW_CSV = r"C:\Users\CHARLES EKANEM\Documents\FINALYEARPROJECT\dataset\faces\balanced_faces_temp.csv"
-RAW_FACE_DIR = r"C:\Users\CHARLES EKANEM\Documents\FINALYEARPROJECT\dataset\faces"
-OUTPUT_DIR = r"C:\Users\CHARLES EKANEM\Documents\FINALYEARPROJECT\dataset\processed_faces"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+RAW_FACE_DIR = os.path.join(BASE_DIR, "dataset", "faces")
+RAW_CSV = os.path.join(RAW_FACE_DIR, "balanced_faces_temp.csv")
+
+OUTPUT_DIR = os.path.join(BASE_DIR, "dataset", "processed_faces")
 CLEAN_CSV = os.path.join(OUTPUT_DIR, "processed_faces.csv")
 
-# === CREATE OUTPUT FOLDERS ===
 real_out = os.path.join(OUTPUT_DIR, "real")
 fake_out = os.path.join(OUTPUT_DIR, "fake")
 os.makedirs(real_out, exist_ok=True)
 os.makedirs(fake_out, exist_ok=True)
 
-# === IMAGE SETTINGS ===
-TARGET_SIZE = (256, 256)
+TARGET_SIZE = (160, 160)
 
-# === LOAD CSV ===
 df = pd.read_csv(RAW_CSV)
 cleaned_data = []
 
@@ -40,7 +38,6 @@ for i, row in tqdm(df.iterrows(), total=len(df)):
     except Exception as e:
         print(f"[SKIP] Failed to process {input_path}: {e}")
 
-# === SAVE CLEAN CSV ===
 cleaned_df = pd.DataFrame(cleaned_data)
 cleaned_df.to_csv(CLEAN_CSV, index=False)
 print(f"[INFO] Saved cleaned CSV: {CLEAN_CSV}")
